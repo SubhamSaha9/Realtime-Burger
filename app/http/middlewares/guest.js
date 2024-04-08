@@ -1,8 +1,8 @@
 
 const guest = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        next();
+    if (req.isAuthenticated()) {
+        return res.redirect("/");
     }
-    return res.redirect("/");
+    next();
 };
 module.exports = guest;

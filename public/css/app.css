@@ -908,3 +908,12 @@ section.login a {
 section.login a:hover {
   color: #b23301;
 }
+
+section.orders {
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+a.link {
+  color: #FE5F1E;
+}

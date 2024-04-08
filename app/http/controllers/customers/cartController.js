@@ -11,7 +11,7 @@ const cartController = () => {
                     totalPrice: 0
                 }
             }
-            let cart = req.session.cart;
+            const cart = req.session.cart;
             if (!cart.items[req.body._id]) {
                 cart.items[req.body._id] = {
                     item: req.body,
