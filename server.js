@@ -13,19 +13,18 @@ const passport = require("passport");
 const Emitter = require("events");
 
 
-const url = 'mongodb://127.0.0.1:27017/pizza';
 main().then((res) => {
     console.log("connected");
 }).catch((err) => console.log(err));
 const connection = mongoose.connection;
 async function main() {
-    await mongoose.connect(url);
+    await mongoose.connect(process.env.MONGO_URL);
 }
 
 const passportInit = require("./app/config/passport.js");
 
 const store = MongoStore.create({
-    mongoUrl: url,
+    mongoUrl: process.env.MONGO_URL,
     collection: 'sessions',
     crypto: {
         secret: process.env.SECRET,
@@ -67,6 +66,9 @@ app.use((req, res, next) => {
 })
 
 require("./routes/web.js")(app);
+app.use((req, res) => {
+    res.status(404).render("errors/error");
+})
 
 const server = app.listen(port, () => {
     console.log("app is listening to port no 8080");
