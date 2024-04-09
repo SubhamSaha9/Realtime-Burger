@@ -10,12 +10,14 @@ const session = require('express-session');
 const flash = require("express-flash");
 const MongoStore = require('connect-mongo');
 const passport = require("passport");
+const Emitter = require("events");
+
 
 const url = 'mongodb://127.0.0.1:27017/pizza';
 main().then((res) => {
     console.log("connected");
 }).catch((err) => console.log(err));
-
+const connection = mongoose.connection;
 async function main() {
     await mongoose.connect(url);
 }
@@ -30,6 +32,11 @@ const store = MongoStore.create({
     },
     touchAfter: 24 * 3600,
 });
+
+// event emitter
+const eventEmitter = new Emitter();
+app.set("eventEmitter", eventEmitter);
+
 app.use(session({
     store: store,
     secret: process.env.COOKIE_SECRET,
@@ -61,6 +68,21 @@ app.use((req, res, next) => {
 
 require("./routes/web.js")(app);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log("app is listening to port no 8080");
+})
+
+const io = require("socket.io")(server);
+io.on('connection', (socket) => {
+    socket.on("join", (roomName) => {
+        socket.join(roomName);
+    })
+})
+
+eventEmitter.on("orderUpdated", (data) => {
+    io.to(`order_${data.id}`).emit("orderUpdated", data);
+})
+
+eventEmitter.on("orderPlaced", (data) => {
+    io.to(`adminRoom`).emit("orderPlaced", data);
 })
