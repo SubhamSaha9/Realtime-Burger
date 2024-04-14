@@ -26,7 +26,7 @@ const orderController = () => {
                                 amount: req.session.cart.totalPrice * 100,
                                 source: stripeToken,
                                 currency: 'inr',
-                                description: `Pizza order: ${placedOrder._id}`
+                                description: `Burger order: ${placedOrder._id}`
                             }).then(() => {
                                 placedOrder.paymentStatus = true;
                                 placedOrder.paymentType = paymentType;
