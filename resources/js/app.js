@@ -1,6 +1,7 @@
 import axios from "axios";
 import Noty from 'noty';
 import { initAdmin } from "./admin";
+import { initStripe } from "./stripe";
 import moment from "moment";
 
 let addToCart = document.querySelectorAll(".add-to-cart");
@@ -41,6 +42,25 @@ if (alertMsg) {
 }
 
 
+let hiddenOrders = document.querySelector("#hiddenOrder");
+let customerOrders = hiddenOrders ? hiddenOrders.value : null;
+customerOrders = JSON.parse(customerOrders);
+let links = document.querySelectorAll(".link");
+
+if (customerOrders) {
+    customerOrders.forEach((customerOrder) => {
+        if (customerOrder.status === "completed") {
+            for (let link of links) {
+                let id = link.dataset.id;
+                if (customerOrder._id === id) {
+                    link.style.textDecoration = "line-through";
+                }
+            }
+        }
+    })
+}
+
+
 
 // Change order status
 let statuses = document.querySelectorAll(".status_line");
@@ -70,11 +90,15 @@ function updateStatus(order) {
         }
     })
 }
-
 updateStatus(order);
 
-let socket = io();
 
+
+initStripe();
+
+
+
+let socket = io();
 
 if (order) {
     socket.emit("join", `order_${order._id}`);

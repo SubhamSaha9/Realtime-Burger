@@ -23,10 +23,11 @@
             </thead>
             <tbody>
                 <% if (orders.length) { %>
+                    <input type="hidden" id="hiddenOrder" value="<%= JSON.stringify(orders) %>">
                     <% for( order of orders) { %>
                         <tr>
                             <td class="border px-4 py-2">
-                                <a class="link" href="/customer/orders/<%= order._id %>"><%= order._id %></a>
+                                <a class="link" href="/customer/orders/<%= order._id %>" data-id="<%= order._id %>"><%= order._id %></a>
                             </td>
                             <td class="border px-4 py-2"><%= order.phone %></td>
                             <td class="border px-4 py-2"><%= order.address %></td>
