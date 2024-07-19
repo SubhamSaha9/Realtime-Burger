@@ -10,6 +10,10 @@ const admin = require("../app/http/middlewares/admin");
 
 const initRoutes = (app) => {
     app.get("/", homeController().index);
+    app.get("/privacy-policy", homeController().policy);
+    app.get("/terns-and-condition", homeController().condition);
+    app.get("/cancellation-and-refund", homeController().refund);
+    app.get("/shipping-and-delivery", homeController().delivery);
 
     app.get("/cart", cartController().index);
     app.post("/cart", cartController().update);

@@ -1053,6 +1053,10 @@ section.status {
   margin-top: 8px;
 }
 
+.footer{
+  background-color: #efefef;
+}
+
 .page_404 {
   padding: 40px 0;
   background: #f8f8f8;
